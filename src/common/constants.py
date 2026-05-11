@@ -63,18 +63,3 @@ THERMAL_COLUMNS = [
     "cost_b_usd_per_mwh",
     "cost_c_usd_per_h",
 ]
-
-DISPATCH_COLUMNS = [
-    "t",
-    "time_label",
-    "scenario",
-    "load_mw",
-    "wind_forecast_mw",
-    "wind_used_mw",
-    "wind_curtail_mw",
-    "thermal_total_mw",
-    "p_ev_ch_mw",
-    "p_ev_dis_mw",
-    "p_ev_net_mw",
-    "system_cost_usd",
-]

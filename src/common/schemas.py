@@ -9,7 +9,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from src.common.constants import (
-    DISPATCH_COLUMNS,
     EV_INFO_COLUMNS,
     EV_MODE_COLUMNS,
     LOAD_WIND_COLUMNS,
@@ -32,7 +31,6 @@ LOAD_WIND_56 = TableSchema("load_wind_56", tuple(LOAD_WIND_COLUMNS), ("t",))
 TOU_PRICE_96 = TableSchema("tou_price_96", tuple(PRICE_COLUMNS), ("t_day",))
 EV_MODE_PARAMS = TableSchema("ev_mode_params", tuple(EV_MODE_COLUMNS), ("scenario",))
 THERMAL_PARAMS = TableSchema("thermal_params", tuple(THERMAL_COLUMNS), ("unit_id",))
-DISPATCH = TableSchema("dispatch", tuple(DISPATCH_COLUMNS), ("scenario", "t"))
 
 
 SCHEMAS = {
@@ -45,6 +43,5 @@ SCHEMAS = {
         TOU_PRICE_96,
         EV_MODE_PARAMS,
         THERMAL_PARAMS,
-        DISPATCH,
     ]
 }

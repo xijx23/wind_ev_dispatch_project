@@ -1,4 +1,4 @@
-"""Convenience wrapper for the full project pipeline."""
+"""Convenience wrapper for the preprocessing pipeline."""
 
 from __future__ import annotations
 

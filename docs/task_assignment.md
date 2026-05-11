@@ -1,68 +1,30 @@
-# 团队分工摘要
+# 组员 A 当前任务
 
-本文件与根目录 `团队分工文档.md` 保持一致，用于代码开发时快速查阅。
+当前只实现数据预处理相关代码，不实现其他组员的模型内容。
 
-## A：数据底座与报告整合
+## 负责文件
 
-负责：
-
+- `config.yaml`
+- `environment.yml`
+- `requirements.txt`
+- `README.md`
 - `src/common/*`
 - `src/preprocess/*`
-- `src/models/01_unordered_charging.py`
-- `src/analysis/02_result_checks.py`
-- `README.md`
-- `config.yaml`
+- `docs/variable_dictionary.md`
+- `docs/code_interface.md`
+- `docs/modeling_notes.md`
+- `docs/task_assignment.md`
 
-主要输出：预处理数据、无序充电基准、结果一致性检查、最终报告整合。
+## 输出
 
-## B：EV 集群建模与单车分解
-
-负责：
-
-- `src/models/02_ev_aggregate.py`
-- `src/models/05_ev_decomposition.py`
-
-主要输出：
-
-- `data/processed/ev_agg_bounds_ordered_56.csv`
-- `data/processed/ev_agg_bounds_v2g_56.csv`
-- `results/decomposition/ev_plan_ordered.csv`
-- `results/decomposition/ev_plan_v2g.csv`
-
-## C：EMS 调度与渗透率分析
-
-负责：
-
-- `src/models/03_ems_dispatch.py`
-- `src/models/04_penetration_sensitivity.py`
-
-主要输出：
-
-- `results/dispatch/dispatch_unordered.csv`
-- `results/dispatch/dispatch_ordered.csv`
-- `results/dispatch/dispatch_v2g.csv`
-- `results/sensitivity/penetration_sensitivity.csv`
-
-## D：价格机制拓展
-
-负责：
-
-- `src/models/06_price_response.py`
-- `src/analysis/01_metrics.py`
-- `src/analysis/04_generate_tables.py`
-
-主要输出：
-
-- `results/price/price_fixed.csv`
-- `results/price/price_tou.csv`
-- `results/price/price_wind_guided.csv`
-- `results/price/price_response_*.csv`
-- `results/tables/*.csv`
-
-## 协作要求
-
-- 不修改 `data/raw/` 原始附件；
-- 重要参数写入 `config.yaml`；
-- 文件字段遵守 `docs/variable_dictionary.md`；
-- 模块间只通过 CSV、NPZ、JSON 交互；
-- 图表保存到 `results/figures/`，表格保存到 `results/tables/`。
+- `data/processed/time_slots_56.csv`
+- `data/processed/time_slots_96.csv`
+- `data/processed/ev_info.csv`
+- `data/processed/ev_availability_56.npz`
+- `data/processed/ev_online_summary_56.csv`
+- `data/processed/load_wind_56.csv`
+- `data/processed/load_wind_96_for_price.csv`
+- `data/processed/tou_price_96.csv`
+- `data/processed/thermal_params.csv`
+- `data/processed/ev_mode_params.csv`
+- `data/processed/preprocess_report.json`

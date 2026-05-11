@@ -7,13 +7,6 @@ paths:
   raw_data_dir: data/raw
   interim_data_dir: data/interim
   processed_data_dir: data/processed
-  results_dir: results
-  figures_dir: results/figures
-  tables_dir: results/tables
-  dispatch_dir: results/dispatch
-  decomposition_dir: results/decomposition
-  sensitivity_dir: results/sensitivity
-  price_dir: results/price
 
 raw_files:
   ev_arrive_leave: 附件1-集群电动汽车到达_离开数据.xlsx
@@ -54,12 +47,6 @@ ev:
   ordered_charge_fee_usd_per_kwh: 0.035
   v2g_charge_fee_usd_per_kwh: 0.025
   v2g_discharge_fee_usd_per_kwh: 0.045
-
-price_response:
-  total_energy_mwh: 80.0
-  max_charge_power_mw: 17.0
-  discomfort_weight: 0.08
-  wind_guided_discount_ratio: 0.25
 
 thermal_units:
   - unit_id: 1
@@ -106,7 +93,4 @@ outputs:
   tou_price_96: data/processed/tou_price_96.csv
   thermal_params: data/processed/thermal_params.csv
   ev_mode_params: data/processed/ev_mode_params.csv
-  unordered_ev_load_56: data/processed/unordered_ev_load_56.csv
-  ev_agg_bounds_ordered_56: data/processed/ev_agg_bounds_ordered_56.csv
-  ev_agg_bounds_v2g_56: data/processed/ev_agg_bounds_v2g_56.csv
   preprocess_report: data/processed/preprocess_report.json

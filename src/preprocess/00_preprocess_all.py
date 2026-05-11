@@ -10,9 +10,6 @@ import pandas as pd
 from src.common.config_loader import PROJECT_ROOT, load_config, output_path
 from src.common.io_utils import write_json
 from src.common.time_utils import now_timestamp
-from src.preprocess import (
-    _load_module_function,
-)
 
 
 def _call(script_name: str, function_name: str, config: dict) -> dict[str, str]:

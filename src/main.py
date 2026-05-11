@@ -1,4 +1,4 @@
-"""Project orchestration entrypoint."""
+"""Preprocessing orchestration entrypoint for member A."""
 
 from __future__ import annotations
 
@@ -11,28 +11,10 @@ from src.common.config_loader import load_config
 
 STEPS = {
     "preprocess": ("src/preprocess/00_preprocess_all.py", "preprocess_all"),
-    "unordered": ("src/models/01_unordered_charging.py", "run"),
-    "aggregate": ("src/models/02_ev_aggregate.py", "run"),
-    "dispatch": ("src/models/03_ems_dispatch.py", "run_dispatch"),
-    "sensitivity": ("src/models/04_penetration_sensitivity.py", "run"),
-    "decomposition": ("src/models/05_ev_decomposition.py", "run"),
-    "price": ("src/models/06_price_response.py", "run"),
-    "checks": ("src/analysis/02_result_checks.py", "run"),
-    "plots": ("src/analysis/03_plot_results.py", "run"),
-    "tables": ("src/analysis/04_generate_tables.py", "run"),
 }
 
 DEFAULT_ORDER = [
     "preprocess",
-    "unordered",
-    "aggregate",
-    "dispatch",
-    "sensitivity",
-    "decomposition",
-    "price",
-    "checks",
-    "plots",
-    "tables",
 ]
 
 
@@ -60,7 +42,7 @@ def run_pipeline(steps: list[str] | None = None, config: dict | None = None) -> 
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run wind-EV dispatch project pipeline.")
+    parser = argparse.ArgumentParser(description="Run the preprocessing pipeline.")
     parser.add_argument("--step", action="append", choices=sorted(STEPS), help="Run one or more selected steps.")
     args = parser.parse_args()
     run_pipeline(args.step)

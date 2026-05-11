@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from src.common.constants import MAIN_PERIODS, SCENARIOS
+from src.common.constants import MAIN_PERIODS
 from src.common.io_utils import require_columns
 from src.common.schemas import TableSchema
 
@@ -38,17 +38,3 @@ def validate_availability_matrix(matrix: np.ndarray, ev_count: int | None = None
         raise ValueError(f"EV availability matrix must be N x {MAIN_PERIODS}")
     if ev_count is not None and matrix.shape[0] != ev_count:
         raise ValueError(f"EV availability matrix row count {matrix.shape[0]} != {ev_count}")
-
-
-def validate_dispatch(df: pd.DataFrame) -> None:
-    require_columns(
-        df,
-        ["t", "scenario", "load_mw", "wind_forecast_mw", "wind_used_mw", "thermal_total_mw", "p_ev_net_mw"],
-        "dispatch",
-    )
-    invalid = sorted(set(df["scenario"]) - set(SCENARIOS))
-    if invalid:
-        raise ValueError(f"Unknown dispatch scenarios: {invalid}")
-    balance = df["thermal_total_mw"] + df["wind_used_mw"] + df.get("p_ev_dis_mw", 0) - df["load_mw"] - df.get("p_ev_ch_mw", 0)
-    if balance.abs().max() > 1e-4:
-        raise ValueError(f"Dispatch power balance violation: max abs {balance.abs().max():.6g} MW")
