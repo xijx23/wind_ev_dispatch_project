@@ -1,0 +1,112 @@
+project:
+  name: wind_ev_dispatch_project
+  timezone: Asia/Shanghai
+  random_seed: 2026
+
+paths:
+  raw_data_dir: data/raw
+  interim_data_dir: data/interim
+  processed_data_dir: data/processed
+  results_dir: results
+  figures_dir: results/figures
+  tables_dir: results/tables
+  dispatch_dir: results/dispatch
+  decomposition_dir: results/decomposition
+  sensitivity_dir: results/sensitivity
+  price_dir: results/price
+
+raw_files:
+  ev_arrive_leave: 附件1-集群电动汽车到达_离开数据.xlsx
+  load_wind: 附件2-风电出力_普通负荷预测数据.xlsx
+  tou_price: 附件3-参考单日分时电价_未考虑风电消纳.xlsx
+  thermal_params_manual: thermal_params_manual.csv
+  ev_mode_params_manual: ev_mode_params_manual.csv
+
+time:
+  dt_h: 0.25
+  main_start: "18:00"
+  main_periods: 56
+  day_periods: 96
+
+scenarios:
+  unordered:
+    label_zh: 无序充电
+    allow_discharge: false
+  ordered:
+    label_zh: 有序充电
+    allow_discharge: false
+  v2g:
+    label_zh: 有序充放电
+    allow_discharge: true
+
+ev:
+  count: 4012
+  battery_capacity_kwh: 50.0
+  initial_energy_kwh: 15.0
+  minimum_energy_kwh: 10.0
+  charge_need_kwh: 25.0
+  target_energy_kwh: 40.0
+  default_charge_power_kw: 10.0
+  default_discharge_power_kw: 10.0
+  charge_efficiency: 0.85
+  discharge_efficiency: 0.85
+  unordered_charge_fee_usd_per_kwh: 0.035
+  ordered_charge_fee_usd_per_kwh: 0.035
+  v2g_charge_fee_usd_per_kwh: 0.025
+  v2g_discharge_fee_usd_per_kwh: 0.045
+
+price_response:
+  total_energy_mwh: 80.0
+  max_charge_power_mw: 17.0
+  discomfort_weight: 0.08
+  wind_guided_discount_ratio: 0.25
+
+thermal_units:
+  - unit_id: 1
+    p_min_mw: 20.0
+    p_max_mw: 130.0
+    ramp_down_mw_per_min: -1.5
+    ramp_up_mw_per_min: 1.5
+    cost_a_usd_per_mw2h: 0.013
+    cost_b_usd_per_mwh: 19.71
+    cost_c_usd_per_h: 1675.0
+  - unit_id: 2
+    p_min_mw: 20.0
+    p_max_mw: 130.0
+    ramp_down_mw_per_min: -3.0
+    ramp_up_mw_per_min: 3.0
+    cost_a_usd_per_mw2h: 0.015
+    cost_b_usd_per_mwh: 20.39
+    cost_c_usd_per_h: 1669.0
+  - unit_id: 3
+    p_min_mw: 25.0
+    p_max_mw: 162.0
+    ramp_down_mw_per_min: -2.0
+    ramp_up_mw_per_min: 2.0
+    cost_a_usd_per_mw2h: 0.017
+    cost_b_usd_per_mwh: 20.39
+    cost_c_usd_per_h: 1650.0
+  - unit_id: 4
+    p_min_mw: 25.0
+    p_max_mw: 162.0
+    ramp_down_mw_per_min: -1.75
+    ramp_up_mw_per_min: 1.75
+    cost_a_usd_per_mw2h: 0.013
+    cost_b_usd_per_mwh: 19.71
+    cost_c_usd_per_h: 1675.0
+
+outputs:
+  time_slots_56: data/processed/time_slots_56.csv
+  time_slots_96: data/processed/time_slots_96.csv
+  ev_info: data/processed/ev_info.csv
+  ev_availability_56: data/processed/ev_availability_56.npz
+  ev_online_summary_56: data/processed/ev_online_summary_56.csv
+  load_wind_56: data/processed/load_wind_56.csv
+  load_wind_96_for_price: data/processed/load_wind_96_for_price.csv
+  tou_price_96: data/processed/tou_price_96.csv
+  thermal_params: data/processed/thermal_params.csv
+  ev_mode_params: data/processed/ev_mode_params.csv
+  unordered_ev_load_56: data/processed/unordered_ev_load_56.csv
+  ev_agg_bounds_ordered_56: data/processed/ev_agg_bounds_ordered_56.csv
+  ev_agg_bounds_v2g_56: data/processed/ev_agg_bounds_v2g_56.csv
+  preprocess_report: data/processed/preprocess_report.json

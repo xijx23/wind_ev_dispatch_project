@@ -1,0 +1,5 @@
+﻿unit_id,p_min_mw,p_max_mw,ramp_down_mw_per_min,ramp_up_mw_per_min,cost_a_usd_per_mw2h,cost_b_usd_per_mwh,cost_c_usd_per_h
+1,20,130,-1.5,1.5,0.013,19.71,1675
+2,20,130,-3.0,3.0,0.015,20.39,1669
+3,25,162,-2.0,2.0,0.017,20.39,1650
+4,25,162,-1.75,1.75,0.013,19.71,1675

@@ -1,0 +1,78 @@
+{
+  "generated_at": "2026-05-11T15:04:49",
+  "project_root": "E:\\code\\python\\wind_ev_dispatch_project",
+  "outputs": {
+    "time_slots_56": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\time_slots_56.csv",
+    "time_slots_96": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\time_slots_96.csv",
+    "ev_info": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\ev_info.csv",
+    "ev_availability_56": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\ev_availability_56.npz",
+    "ev_online_summary_56": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\ev_online_summary_56.csv",
+    "ev_mode_params": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\ev_mode_params.csv",
+    "load_wind_56": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\load_wind_56.csv",
+    "load_wind_96_for_price": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\load_wind_96_for_price.csv",
+    "tou_price_96": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\tou_price_96.csv",
+    "thermal_params": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\thermal_params.csv"
+  },
+  "summary": {
+    "ev_info": {
+      "rows": 4012,
+      "columns": [
+        "ev_id",
+        "arrival_period_raw",
+        "departure_period_raw",
+        "arrival_slot",
+        "departure_slot",
+        "departure_slot_exclusive",
+        "available_periods"
+      ]
+    },
+    "load_wind_56": {
+      "rows": 56,
+      "columns": [
+        "t",
+        "time_label",
+        "load_mw",
+        "wind_forecast_mw"
+      ]
+    },
+    "tou_price_96": {
+      "rows": 96,
+      "columns": [
+        "t_day",
+        "time_label",
+        "price_cny_per_kwh"
+      ]
+    },
+    "thermal_params": {
+      "rows": 4,
+      "columns": [
+        "unit_id",
+        "p_min_mw",
+        "p_max_mw",
+        "ramp_down_mw_per_min",
+        "ramp_up_mw_per_min",
+        "cost_a_usd_per_mw2h",
+        "cost_b_usd_per_mwh",
+        "cost_c_usd_per_h"
+      ]
+    },
+    "ev_mode_params": {
+      "rows": 3,
+      "columns": [
+        "scenario",
+        "p_ch_max_kw",
+        "p_ch_min_kw",
+        "p_dis_max_kw",
+        "p_dis_min_kw",
+        "charge_need_kwh",
+        "battery_capacity_kwh",
+        "energy_min_kwh",
+        "initial_energy_kwh",
+        "eta_ch",
+        "eta_dis",
+        "charge_fee_usd_per_kwh",
+        "discharge_fee_usd_per_kwh"
+      ]
+    }
+  }
+}
