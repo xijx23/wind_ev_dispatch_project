@@ -7,6 +7,8 @@
 ```bash
 python run_all.py
 python run_all.py --step preprocess
+python run_all.py --step unordered
+python run_all.py --step plots
 ```
 
 ## 原始输入
@@ -34,3 +36,11 @@ python run_all.py --step preprocess
 | `data/processed/thermal_params.csv` | `unit_id`, `p_min_mw`, `p_max_mw`, `ramp_*`, `cost_*` |
 | `data/processed/ev_mode_params.csv` | `scenario`, `p_ch_max_kw`, `p_dis_max_kw`, `eta_*`, `fee_*` |
 | `data/processed/preprocess_report.json` | 预处理输出清单和表结构摘要 |
+
+## 无序充电输出
+
+| 文件 | 主要字段/内容 |
+| --- | --- |
+| `results/dispatch/dispatch_unordered.csv` | `t`, `p_ev_ch_mw`, `system_load_with_unordered_ev_mw`, `charging_count` |
+| `results/figures/fig_02_unordered_ev_load.png` | 普通负荷、无序充电负荷、叠加负荷曲线 |
+| `results/figures/fig_03_ev_online_summary.png` | 在线车辆数与正在充电车辆数 |

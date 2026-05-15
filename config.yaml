@@ -7,6 +7,9 @@ paths:
   raw_data_dir: data/raw
   interim_data_dir: data/interim
   processed_data_dir: data/processed
+  results_dir: results
+  dispatch_dir: results/dispatch
+  figures_dir: results/figures
 
 raw_files:
   ev_arrive_leave: 附件1-集群电动汽车到达_离开数据.xlsx
@@ -93,4 +96,7 @@ outputs:
   tou_price_96: data/processed/tou_price_96.csv
   thermal_params: data/processed/thermal_params.csv
   ev_mode_params: data/processed/ev_mode_params.csv
+  dispatch_unordered: results/dispatch/dispatch_unordered.csv
+  fig_unordered_ev_load: results/figures/fig_02_unordered_ev_load.png
+  fig_ev_online_summary: results/figures/fig_03_ev_online_summary.png
   preprocess_report: data/processed/preprocess_report.json

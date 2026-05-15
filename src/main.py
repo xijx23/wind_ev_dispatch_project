@@ -11,10 +11,14 @@ from src.common.config_loader import load_config
 
 STEPS = {
     "preprocess": ("src/preprocess/00_preprocess_all.py", "preprocess_all"),
+    "unordered": ("src/models/01_unordered_charging.py", "run"),
+    "plots": ("src/analysis/03_plot_results.py", "run"),
 }
 
 DEFAULT_ORDER = [
     "preprocess",
+    "unordered",
+    "plots",
 ]
 
 
@@ -42,7 +46,7 @@ def run_pipeline(steps: list[str] | None = None, config: dict | None = None) -> 
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run the preprocessing pipeline.")
+    parser = argparse.ArgumentParser(description="Run member A data and unordered-charging pipeline.")
     parser.add_argument("--step", action="append", choices=sorted(STEPS), help="Run one or more selected steps.")
     args = parser.parse_args()
     run_pipeline(args.step)

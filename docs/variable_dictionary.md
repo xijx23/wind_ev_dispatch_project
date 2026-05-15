@@ -38,6 +38,14 @@
 | `eta_ch` / `eta_dis` | 充/放电效率 | p.u. |
 | `charge_fee_usd_per_kwh` | 充电费用参数 | $/kWh |
 | `discharge_fee_usd_per_kwh` | 放电费用参数 | $/kWh |
+| `charging_count` | 无序充电中正在充电的车辆数 | 辆 |
+| `p_ev_ch_mw` | EV 集群充电功率 | MW |
+| `p_ev_dis_mw` | EV 集群放电功率 | MW |
+| `p_ev_net_mw` | EV 集群净功率，充电为正 | MW |
+| `system_load_with_unordered_ev_mw` | 普通负荷叠加无序充电后的系统负荷 | MW |
+| `grid_energy_mwh` | EV 从电网侧吸收的电量 | MWh |
+| `battery_energy_mwh` | 计入充电效率后的电池侧补能量 | MWh |
+| `remaining_battery_need_mwh` | 剩余未满足电池侧补能量 | MWh |
 
 ## 负荷、风电、热电与价格
 
