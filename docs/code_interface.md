@@ -8,6 +8,7 @@
 python run_all.py
 python run_all.py --step preprocess
 python run_all.py --step unordered
+python run_all.py --step aggregate
 python run_all.py --step plots
 ```
 
@@ -44,3 +45,19 @@ python run_all.py --step plots
 | `results/dispatch/dispatch_unordered.csv` | `t`, `p_ev_ch_mw`, `system_load_with_unordered_ev_mw`, `charging_count` |
 | `results/figures/fig_02_unordered_ev_load.png` | 普通负荷、无序充电负荷、叠加负荷曲线 |
 | `results/figures/fig_03_ev_online_summary.png` | 在线车辆数与正在充电车辆数 |
+
+## EV 聚合边界输出
+
+| 文件 | 主要字段/内容 |
+| --- | --- |
+| `data/processed/ev_agg_bounds_ordered_56.csv` | 有序充电场景的 `p_ch_max_mw`, `p_dis_max_mw`, `energy_min_mwh`, `energy_max_mwh` |
+| `data/processed/ev_agg_bounds_v2g_56.csv` | 有序充放电场景的 `p_ch_max_mw`, `p_dis_max_mw`, `energy_min_mwh`, `energy_max_mwh` |
+
+其中 `p_*_mw` 为时段内电网侧功率边界，`energy_*_mwh` 为每个时段结束时的累计电池侧净补能边界。调度模型可使用：
+
+```text
+E_ev[t] = E_ev[t-1] + eta_ch * p_ev_ch_mw[t] * dt_h - p_ev_dis_mw[t] * dt_h / eta_dis
+energy_min_mwh[t] <= E_ev[t] <= energy_max_mwh[t]
+0 <= p_ev_ch_mw[t] <= p_ch_max_mw[t]
+0 <= p_ev_dis_mw[t] <= p_dis_max_mw[t]
+```
