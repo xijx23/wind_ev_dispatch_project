@@ -41,6 +41,7 @@ conda env update -f environment.yml --prune
 | `src/common/` | 公共工具：配置、路径、字段、单位、时间和校验 |
 | `src/preprocess/` | 数据预处理脚本，将附件转换为标准 CSV/NPZ/JSON |
 | `src/models/01_unordered_charging.py` | 组员 A 的无序充电基准仿真 |
+| `src/models/02_ev_aggregate.py` | 组员B阶段一的EV聚合约束建模 |
 | `src/models/` | 其他模型文件预留给 EV 聚合、EMS 调度、分解、价格响应等任务 |
 | `src/analysis/` | 预留给结果检查、指标、图表和表格生成 |
 | `docs/` | 变量字典、预处理接口和任务范围说明 |
