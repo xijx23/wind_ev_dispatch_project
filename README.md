@@ -18,14 +18,14 @@ conda env update -f environment.yml --prune
 
 ## 当前代码定位
 
-当前只完成组员 A 的数据底座和无序充电基准：
+当前只完成组员 A 的数据底座和无序充电基准，以及组员B阶段一的EV集群聚合边界：
 
 - `config.yaml`：路径、时段、EV、热电机组等预处理参数；
 - `environment.yml` / `requirements.txt`：环境依赖；
 - `src/common/`：统一字段、配置读取、路径 IO、单位换算、校验；
 - `src/preprocess/`：将附件 1、附件 2、附件 3 和手工参数转为标准 CSV/NPZ。
 - `src/models/01_unordered_charging.py`：仿真无序充电负荷曲线。
-
+- `src/models/02_ev_aggregate.py`：生成有序充电和V2G场景的EV聚合功率/能量边界。
 其他 `src/models/` 和 `src/analysis/` 文件暂不实现，留给对应组员继续完成。
 
 ## 项目结构
