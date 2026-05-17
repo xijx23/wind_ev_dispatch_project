@@ -46,6 +46,13 @@
 | `grid_energy_mwh` | EV 从电网侧吸收的电量 | MWh |
 | `battery_energy_mwh` | 计入充电效率后的电池侧补能量 | MWh |
 | `remaining_battery_need_mwh` | 剩余未满足电池侧补能量 | MWh |
+| `p_ch_max_mw` | 当前时段 EV 集群最大可充电功率，电网侧 | MW |
+| `p_dis_max_mw` | 当前时段 EV 集群最大可放电功率，电网侧 | MW |
+| `p_net_min_mw` / `p_net_max_mw` | EV 集群净功率上下限，充电为正 | MW |
+| `energy_min_mwh` / `energy_max_mwh` | 时段结束时 EV 集群累计电池侧净补能上下限 | MWh |
+| `departed_target_energy_mwh` | 截至当前时段结束，已离开车辆累计应满足补能量 | MWh |
+| `feasibility_gap_mwh` | 聚合边界不可行缺口，正常应为 0 | MWh |
+| `total_required_energy_mwh` | 全部 EV 最终累计应补电池侧能量 | MWh |
 
 ## 负荷、风电、热电与价格
 
