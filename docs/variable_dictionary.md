@@ -53,7 +53,19 @@
 | `departed_target_energy_mwh` | 截至当前时段结束，已离开车辆累计应满足补能量 | MWh |
 | `feasibility_gap_mwh` | 聚合边界不可行缺口，正常应为 0 | MWh |
 | `total_required_energy_mwh` | 全部 EV 最终累计应补电池侧能量 | MWh |
+| `battery_energy_kwh` | 单车当前时段结束后的电池电量 | kWh |
+| `delta_energy_kwh` | 单车相对初始电量的净变化 | kWh |
+| `soc` | 单车荷电状态，`battery_energy_kwh / battery_capacity_kwh` | p.u. |
+| `is_online` | 单车当前时段是否在线 | 0/1 |
+| `is_departure_slot` | 当前时段是否为该车离开前最后一个可用时段 | 0/1 |
+| `target_p_ev_ch_mw` / `target_p_ev_dis_mw` | EMS 输出并经数值残差清理后的集群充/放电功率目标 | MW |
+| `allocated_p_ev_ch_mw` / `allocated_p_ev_dis_mw` | 单车计划重新聚合后的集群充/放电功率 | MW |
+| `ch_error_mw` / `dis_error_mw` / `net_error_mw` | 单车分解相对 EMS 集群目标的功率误差 | MW |
+| `departure_shortfall_kwh` / `departure_surplus_kwh` | 离开车辆相对目标电量的总缺口/盈余 | kWh |
 
+| `departure_shortfall_kwh` / `departure_surplus_kwh` | 离开车辆相对目标电量的总缺口/盈余 | kWh |
+| `departure_shift_slots` / `departure_shift_minutes` | 离开时间相对原始数据整体平移量 | 时段 / min |
+| `infeasible_vehicle_count` | 离开时间平移后未达到目标电量的车辆数 | 辆 |
 ## 负荷、风电、热电与价格
 
 | 变量 | 含义 | 单位 |
