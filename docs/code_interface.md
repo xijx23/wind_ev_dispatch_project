@@ -9,7 +9,10 @@ python run_all.py
 python run_all.py --step preprocess
 python run_all.py --step unordered
 python run_all.py --step aggregate
-python run_all.py --step plots
+python run_all.py --step dispatch
+python run_all.py --step decomposition
+python run_all.py --step plots_ev
+python run_all.py --step plots_dispatch
 ```
 
 ## 原始输入
@@ -61,3 +64,17 @@ energy_min_mwh[t] <= E_ev[t] <= energy_max_mwh[t]
 0 <= p_ev_ch_mw[t] <= p_ch_max_mw[t]
 0 <= p_ev_dis_mw[t] <= p_dis_max_mw[t]
 ```
+
+## EV 单车分解输出
+
+| 文件 | 主要字段/内容 |
+| --- | --- |
+| `results/decomposition/ev_plan_ordered.csv` | 有序充电场景单车计划：`ev_id`, `t`, `p_ch_kw`, `p_dis_kw`, `battery_energy_kwh`, `soc` |
+| `results/decomposition/ev_plan_v2g.csv` | V2G 场景单车计划：`ev_id`, `t`, `p_ch_kw`, `p_dis_kw`, `battery_energy_kwh`, `soc` |
+| `results/decomposition/decomposition_error_ordered.csv` | 有序充电分解误差、约束违反计数、离开时电量缺口 |
+| `results/decomposition/decomposition_error_v2g.csv` | V2G 分解误差、约束违反计数、离开时电量缺口 |
+| `results/decomposition/departure_shift_feasibility.csv` | 离开时间整体提前/延后若干时段后的单车电量可行性检查 |
+| `results/figures/fig_10_decomposition_error.png` | 单车分解后的聚合功率误差 |
+| `results/figures/fig_11_ev_soc_examples.png` | 典型车辆 SOC 轨迹 |
+
+单车计划使用单车层单位 `kW/kWh`。误差文件中 `target_*` 来自 C 的 EMS 调度曲线，`allocated_*` 为单车计划重新聚合后的结果；若二者不同，表示单车协调为满足在线窗口、功率、电量和离开需求而对集群曲线进行了可行性修正。
