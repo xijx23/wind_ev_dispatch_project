@@ -13,14 +13,18 @@ STEPS = {
     "preprocess": ("src/preprocess/00_preprocess_all.py", "preprocess_all"),
     "unordered": ("src/models/01_unordered_charging.py", "run"),
     "aggregate":("src/models/02_ev_aggregate.py", "run"),
-    "plots": ("src/analysis/03_plot_results.py", "run"),
+    "dispatch":("src/models/03_ems_dispatch.py", "run"),
+    "sensitivity":("src/models/04_penetration_sensitivity.py", "run"),
+    "plots_dispatch":("src/analysis/05_plot_dispatch_results.py", "run"),
 }
 
 DEFAULT_ORDER = [
     "preprocess",
     "unordered",
     "aggregate",
-    "plots",
+    "dispatch",
+    "sensitivity",
+    "plots_dispatch",
 ]
 
 

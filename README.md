@@ -18,7 +18,7 @@ conda env update -f environment.yml --prune
 
 ## 当前代码定位
 
-当前只完成组员 A 的数据底座和无序充电基准，以及组员B阶段一的EV集群聚合边界：
+当前已完成组员A的数据底座和无序充电基准、组员B阶段一的EV集群聚合边界，以及组员C的EMS调度优化与渗透率分析：
 
 - `config.yaml`：路径、时段、EV、热电机组等预处理参数；
 - `environment.yml` / `requirements.txt`：环境依赖；
@@ -26,6 +26,9 @@ conda env update -f environment.yml --prune
 - `src/preprocess/`：将附件 1、附件 2、附件 3 和手工参数转为标准 CSV/NPZ。
 - `src/models/01_unordered_charging.py`：仿真无序充电负荷曲线。
 - `src/models/02_ev_aggregate.py`：生成有序充电和V2G场景的EV聚合功率/能量边界。
+- `src/models/03_ems_dispatch.py`：完成组员C的EMS系统调度优化模型（支持三种EV场景）。
+- `src/models/04_penetration_sensitivity.py`：完成组员C的EV渗透率敏感性分析。
+- `src/analysis/05_plot_dispatch_results.py`：完成组员C的EMS调度结果可视化。
 其他 `src/models/` 和 `src/analysis/` 文件暂不实现，留给对应组员继续完成。
 
 ## 项目结构
@@ -56,5 +59,6 @@ conda env update -f environment.yml --prune
 - 单车层单位：`kW/kWh`；
 - 集群和系统层单位：`MW/MWh`；
 - 场景名：`unordered`、`ordered`、`v2g`。
+- 优化调度假设：热电机组初始时刻（t=0）不设爬坡约束，仅受出力上下限约束；EV集群在优化周期结束时需满足总充电量需求。
 
 详细字段见 `docs/variable_dictionary.md`，预处理接口见 `docs/code_interface.md`。
