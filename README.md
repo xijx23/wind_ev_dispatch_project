@@ -18,7 +18,7 @@ conda env update -f environment.yml --prune
 
 ## 当前代码定位
 
-当前已完成组员A的数据底座和无序充电基准、组员B阶段一的EV集群聚合边界，以及组员C的EMS调度优化与渗透率分析：
+当前已完成组员A的数据底座和无序充电基准、组员B的EV集群建模与单车分解，以及组员C的EMS调度优化与渗透率分析：
 
 - `config.yaml`：路径、时段、EV、热电机组等预处理参数；
 - `environment.yml` / `requirements.txt`：环境依赖；
@@ -28,6 +28,8 @@ conda env update -f environment.yml --prune
 - `src/models/02_ev_aggregate.py`：生成有序充电和V2G场景的EV聚合功率/能量边界。
 - `src/models/03_ems_dispatch.py`：完成组员C的EMS系统调度优化模型（支持三种EV场景）。
 - `src/models/04_penetration_sensitivity.py`：完成组员C的EV渗透率敏感性分析。
+- `src/models/05_ev_decomposition.py`：完成组员B第二阶段的EV集群功率单车分解与可行性检查。
+- `src/analysis/04_plot_ev_results.py`：完成EV分解误差与典型SOC轨迹可视化。
 - `src/analysis/05_plot_dispatch_results.py`：完成组员C的EMS调度结果可视化。
 其他 `src/models/` 和 `src/analysis/` 文件暂不实现，留给对应组员继续完成。
 
@@ -45,6 +47,7 @@ conda env update -f environment.yml --prune
 | `src/preprocess/` | 数据预处理脚本，将附件转换为标准 CSV/NPZ/JSON |
 | `src/models/01_unordered_charging.py` | 组员 A 的无序充电基准仿真 |
 | `src/models/02_ev_aggregate.py` | 组员B阶段一的EV聚合约束建模 |
+| `src/models/05_ev_decomposition.py` | 组员B阶段二的EV单车分解协调 |
 | `src/models/` | 其他模型文件预留给 EV 聚合、EMS 调度、分解、价格响应等任务 |
 | `src/analysis/` | 预留给结果检查、指标、图表和表格生成 |
 | `docs/` | 变量字典、预处理接口和任务范围说明 |
