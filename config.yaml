@@ -99,6 +99,15 @@ outputs:
   ev_agg_bounds_ordered_56: data/processed/ev_agg_bounds_ordered_56.csv
   ev_agg_bounds_v2g_56: data/processed/ev_agg_bounds_v2g_56.csv
   dispatch_unordered: results/dispatch/dispatch_unordered.csv
+  dispatch_ordered: results/dispatch/dispatch_ordered.csv
+  dispatch_v2g: results/dispatch/dispatch_v2g.csv
+  ev_plan_ordered: results/decomposition/ev_plan_ordered.csv
+  ev_plan_v2g: results/decomposition/ev_plan_v2g.csv
+  decomposition_error_ordered: results/decomposition/decomposition_error_ordered.csv
+  decomposition_error_v2g: results/decomposition/decomposition_error_v2g.csv
+  departure_shift_feasibility: results/decomposition/departure_shift_feasibility.csv
   fig_unordered_ev_load: results/figures/fig_02_unordered_ev_load.png
   fig_ev_online_summary: results/figures/fig_03_ev_online_summary.png
+  fig_decomposition_error: results/figures/fig_10_decomposition_error.png
+  fig_ev_soc_examples: results/figures/fig_11_ev_soc_examples.png
   preprocess_report: data/processed/preprocess_report.json
