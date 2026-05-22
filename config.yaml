@@ -108,6 +108,7 @@ outputs:
   departure_shift_feasibility: results/decomposition/departure_shift_feasibility.csv
   fig_unordered_ev_load: results/figures/fig_02_unordered_ev_load.png
   fig_ev_online_summary: results/figures/fig_03_ev_online_summary.png
+  fig_ev_aggregate_bounds: results/figures/fig_04_ev_aggregate_bounds.png
   fig_decomposition_error: results/figures/fig_10_decomposition_error.png
   fig_ev_soc_examples: results/figures/fig_11_ev_soc_examples.png
   preprocess_report: data/processed/preprocess_report.json
