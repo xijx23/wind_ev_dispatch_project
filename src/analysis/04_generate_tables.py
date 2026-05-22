@@ -51,6 +51,39 @@ def plot_decomposition_error(config: dict | None = None) -> dict[str, str]:
     return {"fig_decomposition_error": str(fig_path)}
 
 
+def plot_ev_aggregate_bounds(config: dict | None = None) -> dict[str, str]:
+    cfg = config or load_config()
+    fig, axes = plt.subplots(2, 1, figsize=(10.5, 7.0), sharex=True)
+
+    last_df: pd.DataFrame | None = None
+    for scenario in SCENARIOS:
+        df = pd.read_csv(output_path(f"ev_agg_bounds_{scenario}_56", cfg))
+        last_df = df
+        label = SCENARIO_LABELS[scenario]
+        axes[0].plot(df["t"], df["p_ch_max_mw"], linewidth=1.8, label=f"{label} charge max")
+        if df["p_dis_max_mw"].abs().max() > 1e-9:
+            axes[0].plot(df["t"], -df["p_dis_max_mw"], linewidth=1.8, linestyle="--", label=f"{label} discharge max")
+        axes[1].plot(df["t"], df["energy_min_mwh"], linewidth=1.7, label=f"{label} lower")
+        axes[1].plot(df["t"], df["energy_max_mwh"], linewidth=1.7, linestyle="--", label=f"{label} upper")
+
+    axes[0].set_title("EV Aggregate Power Bounds")
+    axes[0].set_ylabel("Power (MW)")
+    axes[0].legend(ncol=2)
+    axes[0].grid(True, alpha=0.25)
+    axes[1].set_title("EV Aggregate Cumulative Energy Bounds")
+    axes[1].set_ylabel("Energy (MWh)")
+    axes[1].set_xlabel("Time")
+    axes[1].legend(ncol=2)
+    if last_df is not None:
+        _format_time_axis(axes[1], last_df)
+    fig.tight_layout()
+    fig_path = output_path("fig_ev_aggregate_bounds", cfg)
+    fig_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(fig_path, dpi=200)
+    plt.close(fig)
+    return {"fig_ev_aggregate_bounds": str(fig_path)}
+
+
 def _sample_ev_ids(plan: pd.DataFrame, count: int = 5) -> list[int]:
     ev_windows = (
         plan[["ev_id", "departure_slot_exclusive"]]
@@ -94,6 +127,7 @@ def plot_ev_soc_examples(config: dict | None = None) -> dict[str, str]:
 def run(config: dict | None = None) -> dict[str, str]:
     cfg = config or load_config()
     outputs = {}
+    outputs.update(plot_ev_aggregate_bounds(cfg))
     outputs.update(plot_decomposition_error(cfg))
     outputs.update(plot_ev_soc_examples(cfg))
     return outputs
