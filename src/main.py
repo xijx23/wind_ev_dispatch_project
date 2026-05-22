@@ -1,4 +1,4 @@
-"""Preprocessing orchestration entrypoint for member A."""
+"""Project orchestration entrypoint."""
 
 from __future__ import annotations
 
@@ -14,7 +14,9 @@ STEPS = {
     "unordered": ("src/models/01_unordered_charging.py", "run"),
     "aggregate":("src/models/02_ev_aggregate.py", "run"),
     "dispatch":("src/models/03_ems_dispatch.py", "run"),
+    "decomposition":("src/models/05_ev_decomposition.py", "run"),
     "sensitivity":("src/models/04_penetration_sensitivity.py", "run"),
+    "plots_ev":("src/analysis/04_plot_ev_results.py", "run"),
     "plots_dispatch":("src/analysis/05_plot_dispatch_results.py", "run"),
 }
 
@@ -23,7 +25,9 @@ DEFAULT_ORDER = [
     "unordered",
     "aggregate",
     "dispatch",
+    "decomposition",
     "sensitivity",
+    "plots_ev",
     "plots_dispatch",
 ]
 
