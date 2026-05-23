@@ -1,0 +1,4 @@
+Scenario,Energy (MWh),Electricity Cost (kYuan),Discomfort Cost (kYuan),Total Cost (kYuan),Wind Correlation,Weighted Wind (MW)
+Fixed price,80.24,40.12,0.0,40.12,,92.0744
+Time-of-Use,80.24,30.2184,0.161,30.3793,0.7644,153.7289
+Recommended (β=1.00),80.24,4.007,0.3264,4.3333,0.6954,171.9405
