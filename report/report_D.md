@@ -29,7 +29,7 @@ $$
 p_{\text{new}}(t, \beta) = p_{\text{tou}}(t) \times \left[1 + \beta \cdot \frac{\overline{P}_{\text{wind}} - P_{\text{wind}}(t)}{\overline{P}_{\text{wind}}}\right]
 $$
 
-- $\beta$：调节系数（0~0.8）
+- $\beta$：调节系数（0~0.8：这个范围可以很好地完成风电消纳和充电引导，由于总功率限制，再增大也没有意义）
 - $P_{\text{wind}}(t)$：时段风电功率
 - $\overline{P}_{\text{wind}}$：平均风电功率
 
@@ -64,7 +64,7 @@ $$
 
 ![电价曲线对比](../results/figures/fig_12_price_curves.png)
 
-**充电情况**
+**对应的最优充电情况**
 
 ![充电功率对比](../results/figures/fig_13_price_response.png)
 
@@ -218,6 +218,9 @@ $$
 局部搜索作为β扫描的补充，证明了：
 1. **人工设计的电价公式已接近最优**：初始解（β=0.4）已经处于目标函数的高原区域，原因是存在很多物理上的约束
 2. **存在参数等效性**：不同电价曲线可能达到相似的消纳效果，但电费可以更低
+3. 根据局部搜索的结果，增大了电价峰谷差，引导了风电消纳和充电集中
+   ![局部搜索电价对比](../results/figures/fig_17_extra_price_local_search.png)
+   ![局部搜索充电曲线](../results/figures/fig_18_extra_price_response_local_search.png)
 
 ---
 
