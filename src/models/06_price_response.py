@@ -49,7 +49,7 @@ def tou_wind_price(beta):
     avg_wind = np.mean(wind)
     epsilon = 1e-3
     factor = 1 + beta * (avg_wind - wind) / (avg_wind + epsilon)
-    return price_tou * factor
+    return np.clip(price_tou * factor, 0.0, None)
 
 # ========== 参考曲线 ==========
 def reference_charging_profile():
@@ -126,9 +126,10 @@ def scan_beta(beta_list, alpha=0.3, verbose=True):
     return results
 
 # ========== 局部搜索 ==========
-def local_search_from_beta(beta_start, lambda_cost=0.1, alpha=0.3, n_iter=1500, step_init=20.0, anneal=0.995, price_clip=(-500, 2000)):
+def local_search_from_beta(beta_start, lambda_cost=0.1, alpha=0.3, n_iter=1500, step_init=20.0, anneal=0.995, price_clip=(0, 2000), seed=2026):
     init_price = tou_wind_price(beta_start)
     current_price = init_price.copy()
+    rng = np.random.default_rng(seed)
     
     def objective(price):
         p_ch = solve_charging(price, alpha)
@@ -142,7 +143,7 @@ def local_search_from_beta(beta_start, lambda_cost=0.1, alpha=0.3, n_iter=1500, 
     history = []
     
     for i in tqdm(range(n_iter), desc="Local search"):
-        candidate = current_price + np.random.normal(0, step, size=N_TIME)
+        candidate = current_price + rng.normal(0, step, size=N_TIME)
         candidate = np.clip(candidate, price_clip[0], price_clip[1])
         cand_obj = objective(candidate)
         history.append(cand_obj)
@@ -190,7 +191,7 @@ def main():
     # 局部搜索（使用主体 alpha=3.0）
     start_beta = 0.8
     print(f"\n--- 局部搜索 (alpha=3.0，从 β={start_beta} 出发) ---")
-    best_price_ls, best_p_ch_ls, best_metrics_ls, ls_history = local_search_from_beta(start_beta, lambda_cost=0.1, alpha=3.0, n_iter=1500)
+    best_price_ls, best_p_ch_ls, best_metrics_ls, ls_history = local_search_from_beta(start_beta, lambda_cost=0.1, alpha=3.0, n_iter=60)
     print(f"局部搜索最优结果:")
     print(f"  加权风电={best_metrics_ls['weighted_wind_mw']:.1f} MW, 电费={best_metrics_ls['elec_cost_kyuan']:.2f} kYuan, "
           f"匹配度={best_metrics_ls['wind_corr']:.3f}, 不适={best_metrics_ls['discomfort_kyuan']:.2f} kYuan")

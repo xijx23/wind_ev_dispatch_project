@@ -70,8 +70,8 @@ def solve_ems_dispatch(scenario: str, config: dict | None = None, penetration_sc
     ramp_limit_down = ramp_down * 60 * dt_h
     ramp_limit_up = ramp_up * 60 * dt_h
     for t in range(1, MAIN_PERIODS):
-        constraints.append(p_th[:, t] - p_th[:, t-1] >= ramp_limit_down[:, None])
-        constraints.append(p_th[:, t] - p_th[:, t-1] <= ramp_limit_up[:, None])
+        constraints.append(p_th[:, t] - p_th[:, t - 1] >= ramp_limit_down)
+        constraints.append(p_th[:, t] - p_th[:, t - 1] <= ramp_limit_up)
         
     # Wind limits
     constraints.append(p_wind_used >= 0)
@@ -111,7 +111,15 @@ def solve_ems_dispatch(scenario: str, config: dict | None = None, penetration_sc
         cost += cp.sum(cost_a[i] * cp.square(p_th[i, :]) + cost_b[i] * p_th[i, :] + cost_c[i]) * dt_h
         
     prob = cp.Problem(cp.Minimize(cost), constraints)
-    prob.solve()
+    for solver in ("CLARABEL", "OSQP", "SCIPY"):
+        if solver not in cp.installed_solvers():
+            continue
+        try:
+            prob.solve(solver=solver)
+        except cp.SolverError:
+            continue
+        if prob.status in ["optimal", "optimal_inaccurate"]:
+            break
     
     if prob.status not in ["optimal", "optimal_inaccurate"]:
         raise ValueError(f"EMS optimization failed for {scenario} with status {prob.status}")

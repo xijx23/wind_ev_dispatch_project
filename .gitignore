@@ -1,0 +1,10 @@
+# PPT / presentation working files and generated decks
+presentation/
+outputs/manual-*-evppt/
+
+# Generated analysis results
+results/
+
+# Python cache files
+__pycache__/
+*.py[cod]

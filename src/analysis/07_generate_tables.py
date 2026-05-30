@@ -1,67 +1,149 @@
-"""
-生成汇总表格（写入组长预留的表格文件）
-- table_price_summary.csv：固定、分时、推荐、局部搜索对比
-- 其他表格（成本、弃风等）由主任务负责，本模块不覆盖
-"""
+"""Generate summary tables for dispatch, penetration, wind curtailment, and price response."""
 
-import sys
+from __future__ import annotations
+
 from pathlib import Path
 
-PROJ_ROOT = Path(__file__).parents[2]
-sys.path.insert(0, str(PROJ_ROOT))
-
 import pandas as pd
-import numpy as np
-import importlib
 
-model = importlib.import_module('src.models.06_price_response')
+from src.common.config_loader import load_config, output_path
+from src.common.io_utils import write_csv
 
-TABLE_DIR = PROJ_ROOT / "results/tables"
-TABLE_DIR.mkdir(exist_ok=True, parents=True)
 
-def generate_tables():
-    # 加载模型结果
-    res = model.main()
-    
-    # 使用主体 alpha=3.0 的数据
-    scan_results = res['scan_alpha3.0']
-    _, _, m_fixed = res['fixed']
-    _, _, m_tou = res['tou']
-    best_price_ls, best_p_ch_ls, best_metrics_ls, start_beta, _ = res['local_search']
-    
-    # 推荐新电价（电费非负下加权风电最大的β）
-    feasible = [r for r in scan_results if r['metrics']['elec_cost_kyuan'] >= 0]
-    if feasible:
-        best_rec = max(feasible, key=lambda x: x['metrics']['weighted_wind_mw'])
-        rec_beta = best_rec['beta']
-        rec_metrics = best_rec['metrics']
-    else:
-        best_rec = max(scan_results, key=lambda x: x['metrics']['weighted_wind_mw'])
-        rec_beta = best_rec['beta']
-        rec_metrics = best_rec['metrics']
-    
-    # 写入 table_price_summary.csv（组长预留）
-    data = {
-        'Scenario': ['Fixed price', 'Time-of-Use', f'Recommended (β={rec_beta:.2f})', f'Local search (from β={start_beta})'],
-        'Weighted Wind (MW)': [m_fixed['weighted_wind_mw'], m_tou['weighted_wind_mw'], rec_metrics['weighted_wind_mw'], best_metrics_ls['weighted_wind_mw']],
-        'Electricity Cost (kYuan)': [m_fixed['elec_cost_kyuan'], m_tou['elec_cost_kyuan'], rec_metrics['elec_cost_kyuan'], best_metrics_ls['elec_cost_kyuan']],
-        'Wind Correlation': [m_fixed['wind_corr'], m_tou['wind_corr'], rec_metrics['wind_corr'], best_metrics_ls['wind_corr']],
-        'Discomfort Cost (kYuan)': [m_fixed['discomfort_kyuan'], m_tou['discomfort_kyuan'], rec_metrics['discomfort_kyuan'], best_metrics_ls['discomfort_kyuan']],
-        'Total Cost (kYuan)': [m_fixed['total_cost_kyuan'], m_tou['total_cost_kyuan'], rec_metrics['total_cost_kyuan'], best_metrics_ls['total_cost_kyuan']]
+SCENARIOS = ("unordered", "ordered", "v2g")
+SCENARIO_LABELS = {"unordered": "Unordered", "ordered": "Ordered", "v2g": "V2G"}
+
+
+def _table_dir(cfg: dict) -> Path:
+    path = Path(cfg["paths"]["results_dir"]) / "tables"
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def _dispatch_path(cfg: dict, scenario: str) -> Path:
+    if scenario == "unordered":
+        return output_path("dispatch_unordered", cfg)
+    return Path(cfg["paths"]["results_dir"]) / "dispatch" / f"dispatch_{scenario}.csv"
+
+
+def _load_dispatches(cfg: dict) -> dict[str, pd.DataFrame]:
+    dispatches: dict[str, pd.DataFrame] = {}
+    for scenario in SCENARIOS:
+        path = _dispatch_path(cfg, scenario)
+        if path.exists() and path.stat().st_size > 0:
+            dispatches[scenario] = pd.read_csv(path)
+    return dispatches
+
+
+def generate_dispatch_tables(config: dict | None = None) -> dict[str, str]:
+    cfg = config or load_config()
+    dt_h = float(cfg["time"]["dt_h"])
+    tables = _table_dir(cfg)
+    dispatches = _load_dispatches(cfg)
+
+    rows: list[dict[str, float | str]] = []
+    curtail_rows: list[dict[str, float | str]] = []
+    cost_rows: list[dict[str, float | str]] = []
+    for scenario, df in dispatches.items():
+        ev_ch_mwh = float((df["p_ev_ch_mw"] * dt_h).sum())
+        ev_dis_mwh = float((df["p_ev_dis_mw"] * dt_h).sum())
+        wind_used_mwh = float((df["p_wind_used_mw"] * dt_h).sum())
+        wind_curtail_mwh = float((df["p_wind_curtailed_mw"] * dt_h).sum())
+        thermal_cost_usd = float(df["thermal_cost_usd"].sum())
+        thermal_energy_mwh = float((df["p_th_total_mw"] * dt_h).sum())
+        rows.append(
+            {
+                "scenario": scenario,
+                "scenario_label": SCENARIO_LABELS[scenario],
+                "ev_charge_mwh": ev_ch_mwh,
+                "ev_discharge_mwh": ev_dis_mwh,
+                "ev_net_mwh": ev_ch_mwh - ev_dis_mwh,
+                "thermal_energy_mwh": thermal_energy_mwh,
+                "wind_used_mwh": wind_used_mwh,
+                "wind_curtailed_mwh": wind_curtail_mwh,
+                "thermal_cost_usd": thermal_cost_usd,
+            }
+        )
+        curtail_rows.append(
+            {
+                "scenario": scenario,
+                "wind_used_mwh": wind_used_mwh,
+                "wind_curtailed_mwh": wind_curtail_mwh,
+                "wind_available_mwh": wind_used_mwh + wind_curtail_mwh,
+                "curtailment_rate": wind_curtail_mwh / (wind_used_mwh + wind_curtail_mwh)
+                if wind_used_mwh + wind_curtail_mwh > 0
+                else 0.0,
+            }
+        )
+        cost_rows.append(
+            {
+                "scenario": scenario,
+                "thermal_cost_usd": thermal_cost_usd,
+                "thermal_energy_mwh": thermal_energy_mwh,
+                "average_thermal_cost_usd_per_mwh": thermal_cost_usd / thermal_energy_mwh
+                if thermal_energy_mwh > 0
+                else 0.0,
+            }
+        )
+
+    outputs = {
+        "table_dispatch_summary": str(write_csv(pd.DataFrame(rows), tables / "table_dispatch_summary.csv")),
+        "table_wind_curtailment_summary": str(
+            write_csv(pd.DataFrame(curtail_rows), tables / "table_wind_curtailment_summary.csv")
+        ),
+        "table_cost_summary": str(write_csv(pd.DataFrame(cost_rows), tables / "table_cost_summary.csv")),
     }
-    df = pd.DataFrame(data)
-    for col in df.columns:
-        if col != 'Scenario':
-            df[col] = df[col].round(4)
-    
-    # 写入组长预留的表格文件
-    out_path = TABLE_DIR / "table_price_summary.csv"
-    df.to_csv(out_path, index=False)
-    print(f"价格汇总表已保存到 {out_path}")
-    print(df.to_string(index=False))
-    
-    # 注意：其他表格（table_cost_summary.csv, table_dispatch_summary.csv 等）
-    # 由主任务（A/B/C）负责，本模块不覆盖，保持组长预留的空文件或原有内容
+    return outputs
+
+
+def generate_penetration_table(config: dict | None = None) -> dict[str, str]:
+    cfg = config or load_config()
+    tables = _table_dir(cfg)
+    src = Path(cfg["paths"]["results_dir"]) / "sensitivity" / "penetration_sensitivity.csv"
+    if not src.exists() or src.stat().st_size == 0:
+        df = pd.DataFrame()
+    else:
+        df = pd.read_csv(src)
+        df = df.sort_values(["scenario", "penetration_scale"]).reset_index(drop=True)
+    path = tables / "table_penetration_summary.csv"
+    return {"table_penetration_summary": str(write_csv(df, path))}
+
+
+def generate_price_table(config: dict | None = None) -> dict[str, str]:
+    cfg = config or load_config()
+    tables = _table_dir(cfg)
+    src = Path(cfg["paths"]["results_dir"]) / "price" / "price_response_summary.csv"
+    if not src.exists() or src.stat().st_size == 0:
+        df = pd.DataFrame()
+    else:
+        df = pd.read_csv(src)
+        df = df.rename(
+            columns={
+                "scenario": "Scenario",
+                "weighted_wind_mw": "Weighted Wind (MW)",
+                "elec_cost_kyuan": "Electricity Cost (kYuan)",
+                "wind_corr": "Wind Correlation",
+                "discomfort_kyuan": "Discomfort Cost (kYuan)",
+                "total_cost_kyuan": "Total Cost (kYuan)",
+            }
+        )
+    path = tables / "table_price_summary.csv"
+    return {"table_price_summary": str(write_csv(df, path))}
+
+
+def run(config: dict | None = None) -> dict[str, str]:
+    cfg = config or load_config()
+    outputs: dict[str, str] = {}
+    outputs.update(generate_dispatch_tables(cfg))
+    outputs.update(generate_penetration_table(cfg))
+    outputs.update(generate_price_table(cfg))
+    return outputs
+
+
+def main() -> None:
+    for name, path in run().items():
+        print(f"{name}: {path}")
+
 
 if __name__ == "__main__":
-    generate_tables()
+    main()

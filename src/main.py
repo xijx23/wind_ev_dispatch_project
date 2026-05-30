@@ -16,8 +16,11 @@ STEPS = {
     "dispatch":("src/models/03_ems_dispatch.py", "run"),
     "decomposition":("src/models/05_ev_decomposition.py", "run"),
     "sensitivity":("src/models/04_penetration_sensitivity.py", "run"),
+    "plots_base":("src/analysis/03_plot_results.py", "run"),
     "plots_ev":("src/analysis/04_plot_ev_results.py", "run"),
     "plots_dispatch":("src/analysis/05_plot_dispatch_results.py", "run"),
+    "price":("src/analysis/08_price_pipeline.py", "run"),
+    "tables":("src/analysis/07_generate_tables.py", "run"),
 }
 
 DEFAULT_ORDER = [
@@ -27,8 +30,11 @@ DEFAULT_ORDER = [
     "dispatch",
     "decomposition",
     "sensitivity",
+    "plots_base",
     "plots_ev",
     "plots_dispatch",
+    "price",
+    "tables",
 ]
 
 
