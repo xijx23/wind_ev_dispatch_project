@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-05-15T11:14:21",
-  "project_root": "E:\\code\\python\\wind_ev_dispatch_project",
+  "generated_at": "2026-06-04T13:41:04",
+  "project_root": "D:\\my_courses\\2026spring_大三下\\能源互联网导论\\作业\\能导大作业",
   "outputs": {
-    "time_slots_56": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\time_slots_56.csv",
-    "time_slots_96": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\time_slots_96.csv",
-    "ev_info": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\ev_info.csv",
-    "ev_availability_56": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\ev_availability_56.npz",
-    "ev_online_summary_56": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\ev_online_summary_56.csv",
-    "ev_mode_params": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\ev_mode_params.csv",
-    "load_wind_56": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\load_wind_56.csv",
-    "load_wind_96_for_price": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\load_wind_96_for_price.csv",
-    "tou_price_96": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\tou_price_96.csv",
-    "thermal_params": "E:\\code\\python\\wind_ev_dispatch_project\\data\\processed\\thermal_params.csv"
+    "time_slots_56": "D:\\my_courses\\2026spring_大三下\\能源互联网导论\\作业\\能导大作业\\data\\processed\\time_slots_56.csv",
+    "time_slots_96": "D:\\my_courses\\2026spring_大三下\\能源互联网导论\\作业\\能导大作业\\data\\processed\\time_slots_96.csv",
+    "ev_info": "D:\\my_courses\\2026spring_大三下\\能源互联网导论\\作业\\能导大作业\\data\\processed\\ev_info.csv",
+    "ev_availability_56": "D:\\my_courses\\2026spring_大三下\\能源互联网导论\\作业\\能导大作业\\data\\processed\\ev_availability_56.npz",
+    "ev_online_summary_56": "D:\\my_courses\\2026spring_大三下\\能源互联网导论\\作业\\能导大作业\\data\\processed\\ev_online_summary_56.csv",
+    "ev_mode_params": "D:\\my_courses\\2026spring_大三下\\能源互联网导论\\作业\\能导大作业\\data\\processed\\ev_mode_params.csv",
+    "load_wind_56": "D:\\my_courses\\2026spring_大三下\\能源互联网导论\\作业\\能导大作业\\data\\processed\\load_wind_56.csv",
+    "load_wind_96_for_price": "D:\\my_courses\\2026spring_大三下\\能源互联网导论\\作业\\能导大作业\\data\\processed\\load_wind_96_for_price.csv",
+    "tou_price_96": "D:\\my_courses\\2026spring_大三下\\能源互联网导论\\作业\\能导大作业\\data\\processed\\tou_price_96.csv",
+    "thermal_params": "D:\\my_courses\\2026spring_大三下\\能源互联网导论\\作业\\能导大作业\\data\\processed\\thermal_params.csv"
   },
   "summary": {
     "ev_info": {
