@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我是充电小能手</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section id="homeScreen" class="screen home-screen">
+        <div class="pixel-sky" aria-hidden="true">
+          <span class="cloud cloud-a"></span>
+          <span class="cloud cloud-b"></span>
+          <span class="windmill windmill-a"><i></i></span>
+          <span class="windmill windmill-b"><i></i></span>
+          <span class="tower"></span>
+          <span class="pipe"></span>
+          <svg class="home-grid-art" viewBox="0 0 980 360" role="img" aria-label="电动汽车、充电桩、风机和输电线路">
+            <path class="wire" d="M44 84 C210 28 370 146 542 86 S790 36 936 108" />
+            <path class="wire wire-low" d="M40 132 C214 78 382 190 548 136 S800 82 940 154" />
+            <g class="line-tower" transform="translate(86 94)">
+              <path d="M52 0 L14 198 H90 Z" />
+              <path d="M20 68 H84 M10 112 H94 M32 68 L74 198 M72 68 L30 198" />
+            </g>
+            <g class="line-tower small" transform="translate(780 126)">
+              <path d="M44 0 L12 158 H76 Z" />
+              <path d="M18 56 H72 M8 94 H82 M28 56 L64 158 M62 56 L26 158" />
+            </g>
+            <g class="charging-pile" transform="translate(618 165)">
+              <rect x="0" y="0" width="74" height="128" rx="10" />
+              <rect x="15" y="16" width="44" height="34" rx="5" />
+              <path d="M74 38 C132 42 108 116 156 118" />
+              <circle cx="154" cy="118" r="10" />
+              <path d="M38 70 L26 94 H42 L34 116 L58 84 H42 Z" />
+            </g>
+            <g class="electric-car" transform="translate(278 218)">
+              <path class="car-body" d="M18 52 L54 18 H162 L206 52 H232 C246 52 256 62 256 76 V104 H0 V76 C0 62 8 52 18 52 Z" />
+              <path class="car-window" d="M68 28 H118 V52 H42 Z" />
+              <path class="car-window" d="M126 28 H158 L190 52 H126 Z" />
+              <circle class="wheel" cx="58" cy="106" r="24" />
+              <circle class="wheel" cx="198" cy="106" r="24" />
+              <rect x="100" y="65" width="54" height="20" rx="4" />
+              <path class="bolt" d="M126 60 L112 82 H128 L120 104 L148 74 H132 Z" />
+            </g>
+            <path class="road" d="M205 326 H786" />
+          </svg>
+        </div>
+        <div class="home-panel">
+          <div class="coin-row" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <h1>我是充电小能手</h1>
+          <p>4 名玩家 · 6 轮决策 · 目标电量 80%</p>
+          <button id="startBtn" class="primary-btn">开始游戏</button>
+        </div>
+      </section>
+
+      <section id="ruleScreen" class="screen rule-screen hidden">
+        <div class="rules-panel">
+          <h2>游戏规则</h2>
+          <div class="rule-grid">
+            <article>
+              <strong>决策前</strong>
+              <p>只公布时间段和电价预测区间，不公布风电实际情况。</p>
+            </article>
+            <article>
+              <strong>决策后</strong>
+              <p>公布实际电价、电价背景、电量变化、成本变化和黑电触发。</p>
+            </article>
+            <article>
+              <strong>电量规则</strong>
+              <p>初始 45%，充电 +20%，不充电 -10%，日终目标 80%。差1%补1.2元。</p>
+            </article>
+            <article>
+              <strong>黑电规则</strong>
+              <p>决策后低于等于 20% 自动充入 25% 黑电，用户成本 +30 元。</p>
+            </article>
+            <article>
+              <strong>充电桩限制</strong>
+              <p>每轮只有 2 个充电桩；充电和卖电都占桩位，桩满后其余未选玩家默认不充电。</p>
+            </article>
+            <article>
+              <strong>V2G 卖电</strong>
+              <p>玩家 A、B 为 V2G 车组，可选择卖电；每轮卖电 30%，获得本轮实际电价金额。</p>
+            </article>
+            <article>
+              <strong>卖电限制</strong>
+              <p>每轮最多 1 个车组卖电；卖电后仍按电量和黑电规则结算。</p>
+            </article>
+            <article>
+              <strong>优先决策</strong>
+              <p>上一轮占据充电桩的玩家，下一轮有权先选；优先权仅持续一轮，不能连续两轮优先。</p>
+            </article>
+            <article>
+              <strong>随机顺序</strong>
+              <p>开启后按随机数决定决策顺序；不开启时，玩家可以自由顺序决策。</p>
+            </article>
+            <article>
+              <strong>系统对比</strong>
+              <p>结束后展示本局系统指标，并与经典无序充电基准进行增减对比。</p>
+            </article>
+          </div>
+          <button id="ruleStartBtn" class="primary-btn">进入第一轮</button>
+        </div>
+      </section>
+
+      <section id="gameScreen" class="screen game-screen hidden">
+        <section class="public-board">
+          <div class="board-topline">
+            <span id="roundBadge" class="round-badge">第 1 / 6 轮</span>
+            <span id="timeBadge" class="time-badge">07:00-10:00</span>
+            <span id="phaseBadge" class="phase-badge">等待决策</span>
+          </div>
+          <div class="board-actions">
+            <button id="randomOrderBtn" class="order-toggle-btn" type="button">开启随机顺序</button>
+            <button id="nextRoundBtn" class="next-round-btn hidden">进入下一轮</button>
+          </div>
+          <div class="board-scene" aria-hidden="true">
+            <span class="scene-line"></span>
+            <span class="scene-tower left"></span>
+            <span class="scene-tower right"></span>
+            <span class="scene-car"></span>
+            <span class="scene-charger"></span>
+            <span class="scene-wind"></span>
+          </div>
+          <div class="price-stage">
+            <div class="question-block" aria-hidden="true">?</div>
+            <div>
+              <p class="stage-label" id="stageLabel">本轮电价预测</p>
+              <h2 id="publicPrice">预计 8-14 元</h2>
+              <p id="publicMessage">除当前电量外，本轮只公布预测电价。请四位玩家完成决策。</p>
+            </div>
+          </div>
+          <div class="public-footer">
+            <span>充电：电量 +20%</span>
+            <span>不充电：电量 -10%</span>
+            <span>≤20%：黑电 +25%，+30 元</span>
+            <span>日终目标：80%</span>
+          </div>
+        </section>
+
+        <section id="playersGrid" class="players-grid" aria-label="玩家决策区"></section>
+      </section>
+
+      <section id="resultScreen" class="screen result-screen hidden">
+        <header class="result-header">
+          <h2>游戏排名</h2>
+          <button id="restartBtn" class="secondary-btn">重新开始</button>
+        </header>
+
+        <section class="result-section">
+          <h3>玩家排名</h3>
+          <div id="rankingList" class="ranking-list"></div>
+        </section>
+
+        <section class="result-section">
+          <h3>逐轮明细</h3>
+          <div id="detailList" class="detail-list"></div>
+        </section>
+
+        <section class="result-section">
+          <h3>系统侧计算统计</h3>
+          <div id="systemStats" class="stats-grid"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
