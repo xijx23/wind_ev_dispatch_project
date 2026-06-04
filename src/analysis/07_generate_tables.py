@@ -49,7 +49,7 @@ def generate_dispatch_tables(config: dict | None = None) -> dict[str, str]:
         ev_dis_mwh = float((df["p_ev_dis_mw"] * dt_h).sum())
         wind_used_mwh = float((df["p_wind_used_mw"] * dt_h).sum())
         wind_curtail_mwh = float((df["p_wind_curtailed_mw"] * dt_h).sum())
-        thermal_cost_usd = float(df["thermal_cost_usd"].sum())
+        total_cost_usd = float(df["total_cost_usd"].sum())
         thermal_energy_mwh = float((df["p_th_total_mw"] * dt_h).sum())
         rows.append(
             {
@@ -61,7 +61,7 @@ def generate_dispatch_tables(config: dict | None = None) -> dict[str, str]:
                 "thermal_energy_mwh": thermal_energy_mwh,
                 "wind_used_mwh": wind_used_mwh,
                 "wind_curtailed_mwh": wind_curtail_mwh,
-                "thermal_cost_usd": thermal_cost_usd,
+                "total_cost_usd": total_cost_usd,
             }
         )
         curtail_rows.append(
@@ -78,9 +78,9 @@ def generate_dispatch_tables(config: dict | None = None) -> dict[str, str]:
         cost_rows.append(
             {
                 "scenario": scenario,
-                "thermal_cost_usd": thermal_cost_usd,
+                "total_cost_usd": total_cost_usd,
                 "thermal_energy_mwh": thermal_energy_mwh,
-                "average_thermal_cost_usd_per_mwh": thermal_cost_usd / thermal_energy_mwh
+                "average_cost_usd_per_mwh": total_cost_usd / thermal_energy_mwh
                 if thermal_energy_mwh > 0
                 else 0.0,
             }

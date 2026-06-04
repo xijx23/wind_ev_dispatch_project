@@ -20,6 +20,14 @@ def solve_ems_dispatch(scenario: str, config: dict | None = None, penetration_sc
     # Load data
     load_wind = pd.read_csv(output_path("load_wind_56", cfg))
     thermal_params = pd.read_csv(output_path("thermal_params", cfg))
+    ev_mode_params = pd.read_csv(output_path("ev_mode_params", cfg))
+    
+    mode = ev_mode_params[ev_mode_params["scenario"] == scenario]
+    if mode.empty:
+        raise ValueError(f"ev_mode_params.csv missing scenario={scenario!r}")
+    mode = mode.iloc[0]
+    fee_ch_usd_per_kwh = float(mode["charge_fee_usd_per_kwh"])
+    fee_dis_usd_per_kwh = float(mode["discharge_fee_usd_per_kwh"])
 
     if scenario == "unordered":
         # Ensure unordered charging baseline exists
@@ -102,6 +110,8 @@ def solve_ems_dispatch(scenario: str, config: dict | None = None, penetration_sc
         constraints.append(energy_cum[-1] == total_required_energy)
         
         # Only v2g can discharge
+        # (Note: Mutual exclusion of charging and discharging is naturally satisfied
+        # because simultaneous charging and discharging increases total cost)
         if scenario == "ordered":
             constraints.append(p_ev_dis == 0)
 
@@ -110,7 +120,10 @@ def solve_ems_dispatch(scenario: str, config: dict | None = None, penetration_sc
     for i in range(n_units):
         cost += cp.sum(cost_a[i] * cp.square(p_th[i, :]) + cost_b[i] * p_th[i, :] + cost_c[i]) * dt_h
         
-    prob = cp.Problem(cp.Minimize(cost), constraints)
+    ev_cost = cp.sum(p_ev_dis * fee_dis_usd_per_kwh * 1000 * dt_h) - cp.sum(p_ev_ch * fee_ch_usd_per_kwh * 1000 * dt_h)
+        
+    # Objective is to minimize total operational cost.
+    prob = cp.Problem(cp.Minimize(cost + ev_cost), constraints)
     for solver in ("CLARABEL", "OSQP", "SCIPY"):
         if solver not in cp.installed_solvers():
             continue
@@ -155,6 +168,13 @@ def solve_ems_dispatch(scenario: str, config: dict | None = None, penetration_sc
         c_i = (cost_a[i] * p_th_val[i, :]**2 + cost_b[i] * p_th_val[i, :] + cost_c[i]) * dt_h
         total_cost_usd += c_i
     result["thermal_cost_usd"] = total_cost_usd
+    
+    ev_ch_val = result["p_ev_ch_mw"].to_numpy() if isinstance(result["p_ev_ch_mw"], pd.Series) else result["p_ev_ch_mw"]
+    ev_dis_val = result["p_ev_dis_mw"].to_numpy() if isinstance(result["p_ev_dis_mw"], pd.Series) else result["p_ev_dis_mw"]
+    
+    ev_cost_usd = (ev_dis_val * fee_dis_usd_per_kwh * 1000 * dt_h) - (ev_ch_val * fee_ch_usd_per_kwh * 1000 * dt_h)
+    result["ev_cost_usd"] = ev_cost_usd
+    result["total_cost_usd"] = total_cost_usd + ev_cost_usd
     
     return result
 

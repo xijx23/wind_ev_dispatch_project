@@ -99,10 +99,10 @@ def plot_dispatch_curves(config: dict | None = None) -> dict[str, str]:
     if sens_path.exists():
         sens = pd.read_csv(sens_path)
         fig, ax = plt.subplots(figsize=(9, 5))
-        sns.lineplot(data=sens, x="penetration_scale", y="total_thermal_cost_usd", hue="scenario", marker="o", ax=ax)
-        ax.set_title("Total Thermal Cost vs EV Penetration")
+        sns.lineplot(data=sens, x="penetration_scale", y="total_cost_usd", hue="scenario", marker="o", ax=ax)
+        ax.set_title("Total Cost vs EV Penetration")
         ax.set_xlabel("Penetration scale")
-        ax.set_ylabel("Thermal cost (USD)")
+        ax.set_ylabel("Total cost (USD)")
         ax.grid(True, alpha=0.25)
         outputs["dispatch_sensitivity_cost"] = _save(fig, fig_dir / "dispatch_sensitivity_cost.png")
 
@@ -156,13 +156,13 @@ def plot_named_dispatch_figures(cfg: dict, dispatches: dict[str, pd.DataFrame]) 
     outputs["fig_07_thermal_output_comparison"] = _save(fig, fig_dir / "fig_07_thermal_output_comparison.png")
 
     cost_rows = [
-        {"scenario": SCENARIO_LABELS[scenario], "thermal_cost_usd": df["thermal_cost_usd"].sum()}
+        {"scenario": SCENARIO_LABELS[scenario], "total_cost_usd": df["total_cost_usd"].sum()}
         for scenario, df in dispatches.items()
     ]
     cost_df = pd.DataFrame(cost_rows)
     fig, ax = plt.subplots(figsize=(7.5, 4.8))
-    ax.bar(cost_df["scenario"], cost_df["thermal_cost_usd"])
-    ax.set_title("Total Thermal Cost Comparison")
+    ax.bar(cost_df["scenario"], cost_df["total_cost_usd"])
+    ax.set_title("Total Operation Cost Comparison")
     ax.set_ylabel("Cost (USD)")
     ax.grid(True, axis="y", alpha=0.25)
     outputs["fig_08_cost_comparison"] = _save(fig, fig_dir / "fig_08_cost_comparison.png")
@@ -171,10 +171,10 @@ def plot_named_dispatch_figures(cfg: dict, dispatches: dict[str, pd.DataFrame]) 
     if sens_path.exists():
         sens = pd.read_csv(sens_path)
         fig, axes = plt.subplots(1, 2, figsize=(12, 4.8))
-        sns.lineplot(data=sens, x="penetration_scale", y="total_thermal_cost_usd", hue="scenario", marker="o", ax=axes[0])
+        sns.lineplot(data=sens, x="penetration_scale", y="total_cost_usd", hue="scenario", marker="o", ax=axes[0])
         axes[0].set_title("Cost Sensitivity")
         axes[0].set_xlabel("EV penetration scale")
-        axes[0].set_ylabel("Thermal cost (USD)")
+        axes[0].set_ylabel("Total cost (USD)")
         axes[0].grid(True, alpha=0.25)
         sns.lineplot(data=sens, x="penetration_scale", y="total_wind_curtailed_mwh", hue="scenario", marker="o", ax=axes[1])
         axes[1].set_title("Curtailment Sensitivity")

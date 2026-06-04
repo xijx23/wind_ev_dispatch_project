@@ -29,7 +29,7 @@ def run_sensitivity(config: dict | None = None) -> pd.DataFrame:
                 res = solve_ems_dispatch(scenario, cfg, penetration_scale=scale)
                 
                 # Calculate metrics
-                total_cost = res["thermal_cost_usd"].sum()
+                total_cost = res["total_cost_usd"].sum()
                 curtailment = res["p_wind_curtailed_mw"].sum() * cfg["time"]["dt_h"]
                 wind_used = res["p_wind_used_mw"].sum() * cfg["time"]["dt_h"]
                 
@@ -40,7 +40,7 @@ def run_sensitivity(config: dict | None = None) -> pd.DataFrame:
                 results.append({
                     "penetration_scale": scale,
                     "scenario": scenario,
-                    "total_thermal_cost_usd": total_cost,
+                    "total_cost_usd": total_cost,
                     "total_wind_curtailed_mwh": curtailment,
                     "total_wind_used_mwh": wind_used,
                     "total_ev_ch_mwh": ev_ch_energy,
