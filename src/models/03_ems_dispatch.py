@@ -109,11 +109,13 @@ def solve_ems_dispatch(scenario: str, config: dict | None = None, penetration_sc
         constraints.append(energy_cum <= energy_max)
         constraints.append(energy_cum[-1] == total_required_energy)
         
-        # Only v2g can discharge
-        # (Note: Mutual exclusion of charging and discharging is naturally satisfied
-        # because simultaneous charging and discharging increases total cost)
+        # Only v2g can discharge, and it cannot charge/discharge simultaneously (Big-M method)
         if scenario == "ordered":
             constraints.append(p_ev_dis == 0)
+        elif scenario == "v2g":
+            z = cp.Variable(MAIN_PERIODS, boolean=True)
+            constraints.append(p_ev_ch <= cp.multiply(p_ch_max, z))
+            constraints.append(p_ev_dis <= cp.multiply(p_dis_max, 1 - z))
 
     # Objective
     cost = 0
@@ -124,7 +126,7 @@ def solve_ems_dispatch(scenario: str, config: dict | None = None, penetration_sc
         
     # Objective is to minimize total operational cost.
     prob = cp.Problem(cp.Minimize(cost + ev_cost), constraints)
-    for solver in ("CLARABEL", "OSQP", "SCIPY"):
+    for solver in ("SCIP", "CLARABEL", "OSQP", "SCIPY"):
         if solver not in cp.installed_solvers():
             continue
         try:
